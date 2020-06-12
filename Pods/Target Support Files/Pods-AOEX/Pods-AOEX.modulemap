@@ -1,0 +1,6 @@
+framework module Pods_AOEX {
+  umbrella header "Pods-AOEX-umbrella.h"
+
+  export *
+  module * { export * }
+}

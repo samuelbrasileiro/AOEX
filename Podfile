@@ -8,4 +8,5 @@ target 'AOEX' do
   # Pods for AOEX
 	pod 'Firebase/Analytics'
 	pod 'Firebase/Auth'
+	pod 'Firebase/Database'
 end

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		3519FC2C24A64DBE00FE61C2 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3519FC2B24A64DBE00FE61C2 /* UIViewExtension.swift */; };
 		3519FC2E24A65EA800FE61C2 /* ProdutorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3519FC2D24A65EA800FE61C2 /* ProdutorViewController.swift */; };
+		3519FC3024A78CE200FE61C2 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3519FC2F24A78CE200FE61C2 /* State.swift */; };
 		35AA0FB2249EAADF00D9D27B /* ProdutoresTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AA0FB1249EAADF00D9D27B /* ProdutoresTableViewController.swift */; };
 		35AA0FB4249EAB2000D9D27B /* ProdutorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AA0FB3249EAB2000D9D27B /* ProdutorTableViewCell.swift */; };
 		35AA0FB6249EAD3000D9D27B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AA0FB5249EAD3000D9D27B /* User.swift */; };
@@ -32,6 +33,7 @@
 		3316FDB311FBC57E5B2512FB /* Pods_AOEX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AOEX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3519FC2B24A64DBE00FE61C2 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		3519FC2D24A65EA800FE61C2 /* ProdutorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProdutorViewController.swift; sourceTree = "<group>"; };
+		3519FC2F24A78CE200FE61C2 /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		35AA0FB1249EAADF00D9D27B /* ProdutoresTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProdutoresTableViewController.swift; sourceTree = "<group>"; };
 		35AA0FB3249EAB2000D9D27B /* ProdutorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProdutorTableViewCell.swift; sourceTree = "<group>"; };
 		35AA0FB5249EAD3000D9D27B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				35AA0FB3249EAB2000D9D27B /* ProdutorTableViewCell.swift */,
 				35C5169C2490273A00D5D569 /* Main.storyboard */,
 				35AA0FB5249EAD3000D9D27B /* User.swift */,
+				3519FC2F24A78CE200FE61C2 /* State.swift */,
 				3519FC2D24A65EA800FE61C2 /* ProdutorViewController.swift */,
 				35AA0FB1249EAADF00D9D27B /* ProdutoresTableViewController.swift */,
 				35C896B224940C33000A8B39 /* FirebaseAuthManager.swift */,
@@ -250,6 +253,7 @@
 				35AA0FB2249EAADF00D9D27B /* ProdutoresTableViewController.swift in Sources */,
 				35C516972490273A00D5D569 /* AppDelegate.swift in Sources */,
 				35C516992490273A00D5D569 /* SceneDelegate.swift in Sources */,
+				3519FC3024A78CE200FE61C2 /* State.swift in Sources */,
 				3519FC2E24A65EA800FE61C2 /* ProdutorViewController.swift in Sources */,
 				35AA0FB6249EAD3000D9D27B /* User.swift in Sources */,
 				35CF05BB249153A2009F3992 /* NewAccountViewController.swift in Sources */,

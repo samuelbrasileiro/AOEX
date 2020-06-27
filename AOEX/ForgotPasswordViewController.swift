@@ -15,6 +15,11 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = "Voltar"
+        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
+        
         emailTextField.delegate = self
             let gesture = UITapGestureRecognizer(target: self, action: #selector(end))
             self.view.addGestureRecognizer(gesture)

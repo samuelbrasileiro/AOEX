@@ -13,6 +13,7 @@ class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate
     
     var produtores: [Produtor] = []
     
+    let statesBank = StatesBrazil()
     override func viewDidLoad() {
 
         super.viewDidLoad()
@@ -29,7 +30,7 @@ class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate
         tableView.separatorStyle = .none
         
         
-        let ref = Database.database().reference().child("users").queryOrdered(byChild: "product")
+        let ref = Database.database().reference().child("users").queryOrdered(byChild: "state")
         
         
         ref.observe(.childAdded, with: { (snapshot) -> Void in
@@ -40,9 +41,14 @@ class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate
                 produtor.site = dictionary["site"] as? String ?? ""
                 produtor.email = dictionary["email"] as? String ?? ""
                 produtor.cnpj = dictionary["cnpj"] as? String ?? ""
+                produtor.phone = dictionary["phone"] as? String ?? ""
+                produtor.city = dictionary["city"] as? String ?? ""
+                let uf = dictionary["state"] as? String ?? ""
+                produtor.state = self.statesBank.get(by: uf)
                 produtor.product = dictionary["product"] as? String ?? ""
                 self.produtores.append(produtor)
                 print(produtor)
+                
                 self.tableView.insertRows(at: [IndexPath(row: self.produtores.count-1, section: 0)], with: UITableView.RowAnimation.automatic)
             }
             }, withCancel: nil)
@@ -88,9 +94,10 @@ class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate
         let selectedBackgroundView = UIView()
         selectedBackgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = selectedBackgroundView
-        if let name = produtores[indexPath.row].name, let product = produtores[indexPath.row].product{
+        if let name = produtores[indexPath.row].name, let product = produtores[indexPath.row].product, let place = produtores[indexPath.row].state?.name{
             cell.name.text = name
             cell.product.text = product
+            cell.placeLabel.text = place
             
         } else{
             cell.name.text = "Inválido"

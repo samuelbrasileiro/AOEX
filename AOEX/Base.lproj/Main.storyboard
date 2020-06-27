@@ -133,13 +133,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Site (opcional)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tca-6k-KuO">
-                                <rect key="frame" x="42" y="477" width="330" height="34"/>
+                                <rect key="frame" x="42" y="519" width="330" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" textContentType="email"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Cidade" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oef-UB-x47">
-                                <rect key="frame" x="42" y="561" width="330" height="34"/>
+                                <rect key="frame" x="42" y="603" width="330" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" textContentType="email"/>
@@ -157,7 +157,7 @@
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" textContentType="email"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Produto trabalhado" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EyR-wJ-0Dk">
-                                <rect key="frame" x="42" y="519" width="330" height="34"/>
+                                <rect key="frame" x="42" y="561" width="330" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" textContentType="email"/>
@@ -192,8 +192,14 @@
                                     <action selector="create:" destination="69H-x1-dSm" eventType="touchUpInside" id="joH-Wz-pT7"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Celular" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dKx-wy-hhz">
+                                <rect key="frame" x="42" y="477" width="330" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardAppearance="light" textContentType="email"/>
+                            </textField>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Selecione o estado" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YPs-je-R47">
-                                <rect key="frame" x="42" y="603" width="330" height="34"/>
+                                <rect key="frame" x="42" y="645" width="330" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" textContentType="email"/>
@@ -212,6 +218,7 @@
                         <outlet property="emailTextField" destination="vFW-kA-8Ic" id="TaU-ZE-mhk"/>
                         <outlet property="nameTextField" destination="TgS-kf-66P" id="Wsg-wc-QSZ"/>
                         <outlet property="passwordTextField" destination="YXZ-p0-kDb" id="dIX-kx-THd"/>
+                        <outlet property="phoneTextField" destination="dKx-wy-hhz" id="jLz-pk-tcT"/>
                         <outlet property="productTextField" destination="EyR-wJ-0Dk" id="sGm-OW-pHE"/>
                         <outlet property="siteTextField" destination="tca-6k-KuO" id="oUw-G6-L4W"/>
                         <outlet property="stateTextField" destination="YPs-je-R47" id="5E5-gv-4tf"/>
@@ -326,6 +333,7 @@
                                 <color key="backgroundColor" red="0.95294117649999999" green="0.95294117649999999" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <connections>
                                     <outlet property="name" destination="s22-hy-vQ2" id="8md-nO-6Wp"/>
+                                    <outlet property="placeLabel" destination="bHU-Yf-vYw" id="cfO-tk-DHw"/>
                                     <outlet property="product" destination="A3o-Je-NBR" id="IdF-wv-72U"/>
                                 </connections>
                             </tableViewCell>
@@ -371,7 +379,7 @@ LTDA</string>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Nome" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lOI-Zf-m9k">
-                                        <rect key="frame" x="16" y="4" width="196" height="22"/>
+                                        <rect key="frame" x="16" y="4" width="189" height="22"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
@@ -427,6 +435,19 @@ LTDA</string>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AYV-he-3h7">
+                                <rect key="frame" x="38" y="732" width="339" height="56"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.12549019610000001" green="0.58431372550000005" blue="0.85490196080000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="SFProDisplay-Regular" family="SF Pro Display" pointSize="23"/>
+                                <state key="normal" title="Solicitar contato">
+                                    <color key="titleColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="contact:" destination="0qw-0A-qq6" eventType="touchUpInside" id="zDL-Ol-Vxa"/>
+                                    <action selector="create:" destination="69H-x1-dSm" eventType="touchUpInside" id="jUn-tL-Fzy"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.95294117649999999" green="0.95294117649999999" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <viewLayoutGuide key="safeArea" id="b2H-1d-fL1"/>
@@ -472,7 +493,6 @@ LTDA</string>
         <!--Produtores-->
         <scene sceneID="RKn-Op-UtW">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="e39-Ra-OO8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController id="ogI-dt-t6g" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Produtores" image="hare" catalog="system" id="pUb-Qp-IgZ"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="VBY-iW-cE9">
@@ -483,6 +503,7 @@ LTDA</string>
                         <segue destination="oW3-0j-uwM" kind="relationship" relationship="rootViewController" id="WLw-zt-x5z"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e39-Ra-OO8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1303" y="1669"/>
         </scene>

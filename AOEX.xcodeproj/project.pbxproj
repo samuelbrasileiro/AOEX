@@ -12,7 +12,7 @@
 		3519FC3024A78CE200FE61C2 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3519FC2F24A78CE200FE61C2 /* State.swift */; };
 		35AA0FB2249EAADF00D9D27B /* ProdutoresTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AA0FB1249EAADF00D9D27B /* ProdutoresTableViewController.swift */; };
 		35AA0FB4249EAB2000D9D27B /* ProdutorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AA0FB3249EAB2000D9D27B /* ProdutorTableViewCell.swift */; };
-		35AA0FB6249EAD3000D9D27B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AA0FB5249EAD3000D9D27B /* User.swift */; };
+		35AA0FB6249EAD3000D9D27B /* Produtor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AA0FB5249EAD3000D9D27B /* Produtor.swift */; };
 		35C516972490273A00D5D569 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C516962490273A00D5D569 /* AppDelegate.swift */; };
 		35C516992490273A00D5D569 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C516982490273A00D5D569 /* SceneDelegate.swift */; };
 		35C5169B2490273A00D5D569 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C5169A2490273A00D5D569 /* LoginViewController.swift */; };
@@ -36,7 +36,7 @@
 		3519FC2F24A78CE200FE61C2 /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		35AA0FB1249EAADF00D9D27B /* ProdutoresTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProdutoresTableViewController.swift; sourceTree = "<group>"; };
 		35AA0FB3249EAB2000D9D27B /* ProdutorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProdutorTableViewCell.swift; sourceTree = "<group>"; };
-		35AA0FB5249EAD3000D9D27B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		35AA0FB5249EAD3000D9D27B /* Produtor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Produtor.swift; sourceTree = "<group>"; };
 		35C516932490273A00D5D569 /* AOEX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AOEX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35C516962490273A00D5D569 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		35C516982490273A00D5D569 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 				35CF05BA249153A2009F3992 /* NewAccountViewController.swift */,
 				35AA0FB3249EAB2000D9D27B /* ProdutorTableViewCell.swift */,
 				35C5169C2490273A00D5D569 /* Main.storyboard */,
-				35AA0FB5249EAD3000D9D27B /* User.swift */,
+				35AA0FB5249EAD3000D9D27B /* Produtor.swift */,
 				3519FC2F24A78CE200FE61C2 /* State.swift */,
 				3519FC2D24A65EA800FE61C2 /* ProdutorViewController.swift */,
 				35AA0FB1249EAADF00D9D27B /* ProdutoresTableViewController.swift */,
@@ -255,7 +255,7 @@
 				35C516992490273A00D5D569 /* SceneDelegate.swift in Sources */,
 				3519FC3024A78CE200FE61C2 /* State.swift in Sources */,
 				3519FC2E24A65EA800FE61C2 /* ProdutorViewController.swift in Sources */,
-				35AA0FB6249EAD3000D9D27B /* User.swift in Sources */,
+				35AA0FB6249EAD3000D9D27B /* Produtor.swift in Sources */,
 				35CF05BB249153A2009F3992 /* NewAccountViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

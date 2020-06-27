@@ -15,14 +15,17 @@ class NewAccountViewController: UIViewController{
     @IBOutlet weak var confirmPassword: UITextField!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var cnpjTextField: UITextField!
+    @IBOutlet weak var phoneTextField: UITextField!
     @IBOutlet weak var siteTextField: UITextField!
     @IBOutlet weak var productTextField: UITextField!
     @IBOutlet weak var cityTextField: UITextField!
     @IBOutlet weak var stateTextField: UITextField!
     
+    
     var selectedState: State?
     
     let statesBank = StatesBrazil()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         emailTextField.delegate = self
@@ -44,6 +47,10 @@ class NewAccountViewController: UIViewController{
         stateTextField.inputView = statePickerView
         
         dismissAndClosePickerView()
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = "Voltar"
+        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         
     }
     func dismissAndClosePickerView(){
@@ -68,7 +75,7 @@ class NewAccountViewController: UIViewController{
             let uid = (Auth.auth().currentUser?.uid)!
             let ref = Database.database().reference().child("users").child(uid)
             
-            ref.setValue(["uid": uid, "email": self.emailTextField.text!, "name": self.nameTextField.text!, "cnpj": self.cnpjTextField.text!, "site": self.siteTextField.text ?? "", "product": self.productTextField.text!, "city": self.cityTextField.text!, "state": self.selectedState!.uf, "creationDate": String(describing: Date())]){ (error, ref) in
+            ref.setValue(["uid": uid, "email": self.emailTextField.text!, "name": self.nameTextField.text!, "cnpj": self.cnpjTextField.text!, "phone": self.phoneTextField.text!, "site": self.siteTextField.text ?? "", "product": self.productTextField.text!, "city": self.cityTextField.text!, "state": self.selectedState!.uf, "creationDate": String(describing: Date())]){ (error, ref) in
                 if let error = error {
                     assertionFailure(error.localizedDescription)
                     return
@@ -84,6 +91,10 @@ class NewAccountViewController: UIViewController{
     func validateEmail(candidate: String) -> Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: candidate)
+    }
+    func validatePhone(candidate: String) -> Bool {
+        let phoneRegex = "(\\(\\d{2}\\))(\\d{4,5}\\-\\d{4})"
+        return NSPredicate(format: "SELF MATCHES %@", phoneRegex).evaluate(with: candidate)
     }
     func validatePassword(candidate: String) -> Bool {
         let passwordRegex =  "(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,}"
@@ -112,13 +123,16 @@ class NewAccountViewController: UIViewController{
                 alertar(title: "Esse e-mail não é válido", message: "Ele tem de ser da forma nome@email.com", nil)
             }
             else if !validatePassword(candidate: password){
-                alertar(title: "Sua senha é inválida.",message: "Certifique-se que ela possua os seguintes requisitos:\n\nNo mínimo 8 caracteres\nUma letra maiúscula\n\nUma letra minúscula\n\nDois dígitos", nil)
+                alertar(title: "Sua senha é inválida.",message: "Certifique-se que ela possua os seguintes requisitos:\n\nNo mínimo 8 caracteres\nUma letra maiúscula\nUma letra minúscula\nDois dígitos", nil)
             }
             else if passwordTextField.text != confirmPassword.text{
                 alertar(title: "Você digitou errado",message: "Certifique-se que os campos \"Senha\" e \"Confirmar senha\" sejam iguais", nil)
             }
             else if !validateCNPJ(candidate: cnpjTextField.text ?? ""){
                 alertar(title: "Seu CNPJ é inválido", message: "Não precisa ter caracteres.", nil)
+            }
+            else if !validatePhone(candidate: phoneTextField.text ?? ""){
+                alertar(title: "Seu número de celular é inválido", message: "Coloque da forma (DDD)XXXXX-XXXX.", nil)
             }
             else if nameTextField.text == "" || productTextField.text == "" || cityTextField.text == "" || stateTextField.text == ""{
                 alertar(title: "Campos faltando", message: "Preencha todos os campos necessários antes de concluir o cadastro", nil)
@@ -129,7 +143,6 @@ class NewAccountViewController: UIViewController{
                     var message = ""
                     if (error == nil) {
                         message = "Sua conta foi criada"
-                        
                         
                     } else {
                         message = "Não foi possível criar sua conta"

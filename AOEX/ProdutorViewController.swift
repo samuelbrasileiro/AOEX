@@ -31,8 +31,29 @@ class ProdutorViewController: UIViewController {
         
         titleLabel.text = produtor?.name
         nameLabel.text = produtor?.name
+        distanceLabel.text = produtor?.state?.name
         productLabel.text = produtor?.product
+        placeLabel.text = produtor?.city
+    }
+    
+    
+    @IBAction func contact(_ sender: Any) {
+        let phoneNumber =  "+55" + produtor!.phone!.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
         
+        let appURL = URL(string: "https://api.whatsapp.com/send?phone=\(phoneNumber)")!
+        if UIApplication.shared.canOpenURL(appURL) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+            }
+            else {
+                UIApplication.shared.openURL(appURL)
+            }
+        } else {
+            let alertController = UIAlertController(title: "Erro", message: "Instale o whatsapp para continuar o contato", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alertController, animated: true)
+        }
+    
     }
     
     override func viewWillDisappear(_ animated: Bool){

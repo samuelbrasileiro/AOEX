@@ -16,6 +16,7 @@ class ProdutorTableViewCell: UITableViewCell {
 
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var product: UILabel!
+    @IBOutlet weak var placeLabel: UILabel!
     
     var delegate: ProdutorCellDelegate?
     override func awakeFromNib() {

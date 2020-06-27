@@ -15,6 +15,9 @@ class Produtor{
     var cnpj: String?
     var product: String?
     var email: String?
+    var city: String?
+    var state: State?
+    var phone: String?
     init(uid: String){
         self.uid = uid
     }

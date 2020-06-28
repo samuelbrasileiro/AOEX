@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import MapKit
 class Produtor{
     var name: String?
     var uid: String
@@ -20,5 +20,9 @@ class Produtor{
     var phone: String?
     init(uid: String){
         self.uid = uid
+    }
+    func distance(from produtor: Produtor)->Double{
+        return sqrt(pow(Double(state!.coordinates.latitude - produtor.state!.coordinates.latitude), 2)+pow(Double(state!.coordinates.longitude - produtor.state!.coordinates.longitude), 2))
+        
     }
 }

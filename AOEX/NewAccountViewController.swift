@@ -21,10 +21,14 @@ class NewAccountViewController: UIViewController{
     @IBOutlet weak var cityTextField: UITextField!
     @IBOutlet weak var stateTextField: UITextField!
     
+    @IBOutlet weak var imageButton: UIButton!
+    
+    @IBOutlet weak var userImageView: UIImageView!
     
     var selectedState: State?
     
     let statesBank = StatesBrazil()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +56,12 @@ class NewAccountViewController: UIViewController{
         backButton.title = "Voltar"
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         
+        
+        
+        userImageView.layer.masksToBounds = true
+        userImageView.layer.cornerRadius = userImageView.bounds.midX
+        userImageView.isHidden = true
+        userImageView.contentMode = .scaleAspectFill
     }
     func dismissAndClosePickerView(){
         let toolbar = UIToolbar()
@@ -73,20 +83,90 @@ class NewAccountViewController: UIViewController{
         { result, error in
             // Create new user in database, not in FIRAuth
             let uid = (Auth.auth().currentUser?.uid)!
+            
             let ref = Database.database().reference().child("users").child(uid)
             
-            ref.setValue(["uid": uid, "email": self.emailTextField.text!, "name": self.nameTextField.text!, "cnpj": self.cnpjTextField.text!, "phone": self.phoneTextField.text!, "site": self.siteTextField.text ?? "", "product": self.productTextField.text!, "city": self.cityTextField.text!, "state": self.selectedState!.uf, "creationDate": String(describing: Date())]){ (error, ref) in
+            ref.setValue(["uid": uid, "email": self.emailTextField.text!, "name": self.nameTextField.text!, "cnpj": self.cnpjTextField.text!, "phone": self.phoneTextField.text!, "site": self.siteTextField.text ?? "", "product": self.productTextField.text!, "city": self.cityTextField.text!, "state": self.selectedState!.uf, "imageURL": "", "creationDate": String(describing: Date())]){ (error, ref) in
                 if let error = error {
                     assertionFailure(error.localizedDescription)
                     return
                 }
             }
             
+            
+
+            
+            if let image = self.userImageView.image{
+                let data = image.pngData()
+                let sRef = Storage.storage().reference()
+                let photoRef = sRef.child("photos/" + uid + ".png")
+                photoRef.putData(data!, metadata: nil) { (metadata, error) in
+                    guard let metadata = metadata else {
+                        // Uh-oh, an error occurred!
+                        return
+                    }
+                    // Metadata contains file metadata such as size, content-type.
+                    let size = metadata.size
+                    // You can also access to download URL after upload.
+                    print(size)
+                    photoRef.downloadURL { (url, error) in
+                        guard let downloadURL = url else {
+                            // Uh-oh, an error occurred!
+                            return
+                        }
+                        
+                        ref.updateChildValues(["imageURL": downloadURL.absoluteString]){ (error, ref) in
+                            if let error = error {
+                                assertionFailure(error.localizedDescription)
+                                return
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            
+            
             let tabController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainTab")
             self.present(tabController, animated: true)
+
             
         }
     }
+    
+    @IBAction func addImageButton(_ sender: UIButton) {
+        let vc = UIImagePickerController()
+        vc.delegate = self
+        vc.allowsEditing = true
+        let actionSheet = UIAlertController(title: "Escolha uma fonte", message: nil, preferredStyle: .actionSheet)
+        
+        actionSheet.addAction(UIAlertAction(title: "Câmera", style: .default, handler: {(action:UIAlertAction) in
+            
+            vc.sourceType = .camera
+            vc.cameraCaptureMode = .photo
+            vc.cameraFlashMode = .off
+            self.present(vc, animated: true)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Biblioteca de Fotos", style: .default, handler: {(action:UIAlertAction) in
+            
+            vc.sourceType = .photoLibrary
+            self.present(vc, animated: true)
+        }))
+        if userImageView.image != nil{
+            actionSheet.addAction(UIAlertAction(title: "Apagar a foto", style: .destructive, handler: {(action:UIAlertAction) in
+                self.userImageView.image = nil
+                
+                
+            }))
+        }
+        let cancel = UIAlertAction(title: "Cancelar", style: .cancel, handler: nil)
+        cancel.setValue(UIColor.red, forKey: "titleTextColor")
+        actionSheet.addAction(cancel)
+        
+        self.present(actionSheet, animated: true)
+        
+    }
+    
     
     func validateEmail(candidate: String) -> Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
@@ -173,7 +253,21 @@ class NewAccountViewController: UIViewController{
     
 }
 
-extension NewAccountViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+extension NewAccountViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+        
+        guard let image = info[.editedImage] as? UIImage else {
+            print("Nenhuma imagem encontrada")
+            return
+        }
+        
+        userImageView.image = image
+        userImageView.isHidden = false
+        imageButton.setTitle("Alterar imagem", for: .normal)
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         dismissEditing()
         return true

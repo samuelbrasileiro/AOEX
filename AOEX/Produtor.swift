@@ -6,7 +6,7 @@
 //  Copyright © 2020 Samuel Brasileiro. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import MapKit
 class Produtor{
     var name: String?
@@ -18,6 +18,8 @@ class Produtor{
     var city: String?
     var state: State?
     var phone: String?
+    var imageURL: String?
+    var image: UIImage?
     init(uid: String){
         self.uid = uid
     }

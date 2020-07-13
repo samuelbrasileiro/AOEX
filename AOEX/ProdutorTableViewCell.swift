@@ -17,11 +17,15 @@ class ProdutorTableViewCell: UITableViewCell {
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var product: UILabel!
     @IBOutlet weak var placeLabel: UILabel!
+    @IBOutlet weak var userImage: UIImageView!
     
     var delegate: ProdutorCellDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        userImage.layer.masksToBounds = true
+        userImage.layer.cornerRadius = userImage.bounds.midX
+        userImage.isHidden = false
+        userImage.contentMode = .scaleAspectFill
     }
 
     @IBAction func knowMoreButtonTapped(_ sender: Any) {

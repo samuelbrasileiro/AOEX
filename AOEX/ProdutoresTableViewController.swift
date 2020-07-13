@@ -9,39 +9,47 @@
 import UIKit
 import Firebase
 
-class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate {
+class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableViewDelegate, UITableViewDataSource {
     
     var produtores: [Produtor] = []
     
     let statesBank = StatesBrazil()
     var userProdutor: Produtor?
     
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.backgroundColor = .clear
+        view.addSubview(UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 82)))
         
         navigationController?.navigationBar.isHidden = true
         
-        let bc = UIImageView(frame: tableView.frame)
+        let bc = UIImageView(frame: view.frame)
         bc.contentMode = .scaleAspectFill
         bc.image = UIImage(named: "background")
         bc.backgroundColor = UIColor(red: 0xF3/0xFF, green: 0xF3/0xFF, blue: 0xF3/0xFF, alpha: 1)
-        tableView.backgroundView = bc
+        self.view.addSubview(bc)
+        self.view.sendSubviewToBack(bc)
         
         tableView.tableFooterView = UIView(frame: .zero)
         tableView.separatorStyle = .none
-        self.clearsSelectionOnViewWillAppear = false
+        
         
         
         
         let userUID = Auth.auth().currentUser!.uid
         let userRef = Database.database().reference().child("users").child(userUID)
         
-        
+        //para pegar o usuario PRINCIPAL/MEUPERFIL
         userRef.observe(.value, with: { (snapshot) -> Void in
             if let dictionary = snapshot.value as? [String: Any] {
                 let produtor = Produtor(uid: dictionary["uid"] as! String)
                 produtor.name = dictionary["name"] as? String ?? ""
+                
                 produtor.site = dictionary["site"] as? String ?? ""
                 produtor.email = dictionary["email"] as? String ?? ""
                 produtor.cnpj = dictionary["cnpj"] as? String ?? ""
@@ -50,6 +58,8 @@ class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate
                 let uf = dictionary["state"] as? String ?? ""
                 produtor.state = self.statesBank.get(by: uf)
                 produtor.product = dictionary["product"] as? String ?? ""
+                produtor.imageURL = dictionary["imageURL"] as? String ?? nil
+                
                 self.userProdutor = produtor
             }
             
@@ -58,10 +68,12 @@ class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate
         })
         
     }
+    
     func observeChilds(){
+        //outros users
         let ref = Database.database().reference().child("users").queryOrdered(byChild: "state")
         ref.observe(.childAdded, with: { (snapshot) -> Void in
-            print(snapshot)
+            //print(snapshot)
             if let dictionary = snapshot.value as? [String: Any] {
                 let produtor = Produtor(uid: dictionary["uid"] as! String)
                 produtor.name = dictionary["name"] as? String ?? ""
@@ -73,12 +85,35 @@ class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate
                 let uf = dictionary["state"] as? String ?? ""
                 produtor.state = self.statesBank.get(by: uf)
                 produtor.product = dictionary["product"] as? String ?? ""
+                produtor.imageURL = dictionary["imageURL"] as? String ?? nil
+                
+                
                 if self.userProdutor!.uid != produtor.uid{
-                self.produtores.append(produtor)
-                self.produtores.sort{ self.userProdutor!.distance(from: $0) < self.userProdutor!.distance(from: $1)}
-                print(produtor)
-                let index = self.produtores.firstIndex{$0 === produtor}
-                self.tableView.insertRows(at: [IndexPath(row: index!, section: 0)], with: UITableView.RowAnimation.automatic)
+                    DispatchQueue.global(qos: .background).async {
+                        
+                        
+                        if produtor.imageURL != nil{
+                            print("aaaa")
+                            
+                            let url = NSURL(string: produtor.imageURL!)
+                            let data = NSData(contentsOf: url! as URL)
+                            if data != nil {
+                                print("ablublé")
+                                produtor.image = UIImage(data: data! as Data)
+                                DispatchQueue.main.async {
+                                    self.tableView.reloadData()
+                                    
+                                }
+                            }
+                        }
+                    }
+                    self.produtores.append(produtor)
+                    self.produtores.sort{ self.userProdutor!.distance(from: $0) < self.userProdutor!.distance(from: $1)}
+                    
+                    
+                    
+                    let index = self.produtores.firstIndex{$0 === produtor}
+                    self.tableView.insertRows(at: [IndexPath(row: index!, section: 0)], with: UITableView.RowAnimation.automatic)
                 }
             }
         }, withCancel: nil)
@@ -103,20 +138,20 @@ class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate
     
     // MARK: - Table view data source
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return produtores.count
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100.0
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 147.0
     }
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "produtorCell", for: indexPath) as? ProdutorTableViewCell else {fatalError("The dequeued cell is not an instance of ProdutorTableViewCell.")}
         cell.delegate = self
         cell.addSeparator(at: .right, color: .lightGray)
@@ -124,6 +159,11 @@ class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate
         let selectedBackgroundView = UIView()
         selectedBackgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = selectedBackgroundView
+        
+        cell.userImage.image = nil
+        if let image = produtores[indexPath.row].image{
+            cell.userImage.image = image
+        }
         if let name = produtores[indexPath.row].name, let product = produtores[indexPath.row].product, let place = produtores[indexPath.row].state?.name{
             cell.name.text = name
             cell.product.text = product
@@ -133,7 +173,7 @@ class ProdutoresTableViewController: UITableViewController, ProdutorCellDelegate
             cell.name.text = "Inválido"
             cell.product.text = "Sem produto definido"
         }
-        // Configure the cell...
+        
         
         return cell
     }

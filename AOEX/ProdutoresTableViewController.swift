@@ -9,12 +9,14 @@
 import UIKit
 import Firebase
 
+var userProdutor: Produtor?
+
 class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableViewDelegate, UITableViewDataSource {
     
     var produtores: [Produtor] = []
     
     let statesBank = StatesBrazil()
-    var userProdutor: Produtor?
+    
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -46,22 +48,10 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
         
         //para pegar o usuario PRINCIPAL/MEUPERFIL
         userRef.observe(.value, with: { (snapshot) -> Void in
-            if let dictionary = snapshot.value as? [String: Any] {
-                let produtor = Produtor(uid: dictionary["uid"] as! String)
-                produtor.name = dictionary["name"] as? String ?? ""
-                
-                produtor.site = dictionary["site"] as? String ?? ""
-                produtor.email = dictionary["email"] as? String ?? ""
-                produtor.cnpj = dictionary["cnpj"] as? String ?? ""
-                produtor.phone = dictionary["phone"] as? String ?? ""
-                produtor.city = dictionary["city"] as? String ?? ""
-                let uf = dictionary["state"] as? String ?? ""
-                produtor.state = self.statesBank.get(by: uf)
-                produtor.product = dictionary["product"] as? String ?? ""
-                produtor.imageURL = dictionary["imageURL"] as? String ?? nil
-                
-                self.userProdutor = produtor
-            }
+            //let produtor = Produtor(snapshot: snapshot)
+            
+            let produtor = Produtor(snapshot: snapshot)
+            userProdutor = produtor
             
             self.observeChilds()
             
@@ -74,32 +64,20 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
         let ref = Database.database().reference().child("users").queryOrdered(byChild: "state")
         ref.observe(.childAdded, with: { (snapshot) -> Void in
             //print(snapshot)
-            if let dictionary = snapshot.value as? [String: Any] {
-                let produtor = Produtor(uid: dictionary["uid"] as! String)
-                produtor.name = dictionary["name"] as? String ?? ""
-                produtor.site = dictionary["site"] as? String ?? ""
-                produtor.email = dictionary["email"] as? String ?? ""
-                produtor.cnpj = dictionary["cnpj"] as? String ?? ""
-                produtor.phone = dictionary["phone"] as? String ?? ""
-                produtor.city = dictionary["city"] as? String ?? ""
-                let uf = dictionary["state"] as? String ?? ""
-                produtor.state = self.statesBank.get(by: uf)
-                produtor.product = dictionary["product"] as? String ?? ""
-                produtor.imageURL = dictionary["imageURL"] as? String ?? nil
+            let produtor = Produtor(snapshot: snapshot)
                 
-                
-                if self.userProdutor!.uid != produtor.uid{
+                if userProdutor!.uid != produtor.uid{
                     DispatchQueue.global(qos: .background).async {
                         
                         
                         if produtor.imageURL != nil{
-                            print("aaaa")
+                            
                             
                             let url = NSURL(string: produtor.imageURL!)
                             let data = NSData(contentsOf: url! as URL)
                             if data != nil {
-                                print("ablublé")
                                 produtor.image = UIImage(data: data! as Data)
+                                
                                 DispatchQueue.main.async {
                                     self.tableView.reloadData()
                                     
@@ -108,14 +86,14 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
                         }
                     }
                     self.produtores.append(produtor)
-                    self.produtores.sort{ self.userProdutor!.distance(from: $0) < self.userProdutor!.distance(from: $1)}
+                    self.produtores.sort{ userProdutor!.distance(from: $0) < userProdutor!.distance(from: $1)}
                     
                     
                     
                     let index = self.produtores.firstIndex{$0 === produtor}
                     self.tableView.insertRows(at: [IndexPath(row: index!, section: 0)], with: UITableView.RowAnimation.automatic)
                 }
-            }
+            
         }, withCancel: nil)
         //        // Listen for deleted comments in the Firebase database
         //        ref.observe(.childRemoved, with: { (snapshot) -> Void in

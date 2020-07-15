@@ -25,6 +25,7 @@
 		35C896B52494180C000A8B39 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C896B42494180C000A8B39 /* MainTabBarController.swift */; };
 		35CF05BB249153A2009F3992 /* NewAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CF05BA249153A2009F3992 /* NewAccountViewController.swift */; };
 		35CF05BD249153CA009F3992 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CF05BC249153CA009F3992 /* ForgotPasswordViewController.swift */; };
+		35D32A2F24BE2EBD000FE84E /* Solicitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D32A2E24BE2EBC000FE84E /* Solicitation.swift */; };
 		6053A890DD4ED28E96DAC7D9 /* Pods_AOEX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3316FDB311FBC57E5B2512FB /* Pods_AOEX.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +52,7 @@
 		35C896B42494180C000A8B39 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		35CF05BA249153A2009F3992 /* NewAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAccountViewController.swift; sourceTree = "<group>"; };
 		35CF05BC249153CA009F3992 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		35D32A2E24BE2EBC000FE84E /* Solicitation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solicitation.swift; sourceTree = "<group>"; };
 		6479914EC51EA2D626A2F8BE /* Pods-AOEX.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AOEX.release.xcconfig"; path = "Target Support Files/Pods-AOEX/Pods-AOEX.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -103,6 +105,7 @@
 				35AA0FB3249EAB2000D9D27B /* ProdutorTableViewCell.swift */,
 				35C5169C2490273A00D5D569 /* Main.storyboard */,
 				35AA0FB5249EAD3000D9D27B /* Produtor.swift */,
+				35D32A2E24BE2EBC000FE84E /* Solicitation.swift */,
 				3519FC2F24A78CE200FE61C2 /* State.swift */,
 				3519FC2D24A65EA800FE61C2 /* ProdutorViewController.swift */,
 				35AA0FB1249EAADF00D9D27B /* ProdutoresTableViewController.swift */,
@@ -257,6 +260,7 @@
 				3519FC2E24A65EA800FE61C2 /* ProdutorViewController.swift in Sources */,
 				35AA0FB6249EAD3000D9D27B /* Produtor.swift in Sources */,
 				35CF05BB249153A2009F3992 /* NewAccountViewController.swift in Sources */,
+				35D32A2F24BE2EBD000FE84E /* Solicitation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

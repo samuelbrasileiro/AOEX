@@ -85,8 +85,20 @@ class NewAccountViewController: UIViewController{
             let uid = (Auth.auth().currentUser?.uid)!
             
             let ref = Database.database().reference().child("users").child(uid)
+            let produtor = Produtor(uid: uid)
+            produtor.name = self.nameTextField.text!
+            produtor.site = self.siteTextField.text
+            produtor.email = self.emailTextField.text!
+            produtor.cnpj = self.cnpjTextField.text!
+            produtor.phone = self.phoneTextField.text!
+            produtor.city = self.cityTextField.text!
+            let uf = self.selectedState!.uf
+            produtor.state = self.statesBank.get(by: uf)
+            produtor.product = self.productTextField.text!
             
-            ref.setValue(["uid": uid, "email": self.emailTextField.text!, "name": self.nameTextField.text!, "cnpj": self.cnpjTextField.text!, "phone": self.phoneTextField.text!, "site": self.siteTextField.text ?? "", "product": self.productTextField.text!, "city": self.cityTextField.text!, "state": self.selectedState!.uf, "imageURL": "", "creationDate": String(describing: Date())]){ (error, ref) in
+            userProdutor = produtor
+            
+            ref.setValue(produtor.toData()){ (error, ref) in
                 if let error = error {
                     assertionFailure(error.localizedDescription)
                     return
@@ -114,7 +126,7 @@ class NewAccountViewController: UIViewController{
                             // Uh-oh, an error occurred!
                             return
                         }
-                        
+                        userProdutor?.imageURL = downloadURL.absoluteString
                         ref.updateChildValues(["imageURL": downloadURL.absoluteString]){ (error, ref) in
                             if let error = error {
                                 assertionFailure(error.localizedDescription)

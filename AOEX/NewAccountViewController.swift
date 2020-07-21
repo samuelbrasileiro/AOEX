@@ -95,6 +95,7 @@ class NewAccountViewController: UIViewController{
             let uf = self.selectedState!.uf
             produtor.state = self.statesBank.get(by: uf)
             produtor.product = self.productTextField.text!
+            produtor.image = self.userImageView.image
             
             userProdutor = produtor
             

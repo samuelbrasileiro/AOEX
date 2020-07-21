@@ -41,21 +41,8 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
         tableView.separatorStyle = .none
         
         
-        
-        
-        let userUID = Auth.auth().currentUser!.uid
-        let userRef = Database.database().reference().child("users").child(userUID)
-        
-        //para pegar o usuario PRINCIPAL/MEUPERFIL
-        userRef.observe(.value, with: { (snapshot) -> Void in
-            //let produtor = Produtor(snapshot: snapshot)
-            
-            let produtor = Produtor(snapshot: snapshot)
-            userProdutor = produtor
-            
-            self.observeChilds()
-            
-        })
+        self.observeChilds()
+
         
     }
     
@@ -65,9 +52,9 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
         ref.observe(.childAdded, with: { (snapshot) -> Void in
             //print(snapshot)
             let produtor = Produtor(snapshot: snapshot)
-                
-                if userProdutor!.uid != produtor.uid{
-                    DispatchQueue.global(qos: .background).async {
+            
+            if userProdutor!.uid != produtor.uid && !self.produtores.contains(where: {produtor.uid == $0.uid}){
+                DispatchQueue.global(qos: .background).async {
                         
                         
                         if produtor.imageURL != nil{
@@ -95,13 +82,16 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
                 }
             
         }, withCancel: nil)
-        //        // Listen for deleted comments in the Firebase database
-        //        ref.observe(.childRemoved, with: { (snapshot) -> Void in
-        //          let index = self.indexOfMessage(snapshot)
-        //          self.comments.remove(at: index)
-        //          self.tableView.deleteRows(at: [IndexPath(row: index, section: self.kSectionComments)], with: UITableView.RowAnimation.automatic)
-        //        })
         
+        //ver mudanças
+        ref.observe(.childChanged, with: { (snapshot) -> Void in
+            let produtor = Produtor(snapshot: snapshot)
+            if let index = self.produtores.firstIndex(where: {produtor.uid == $0.uid}){
+                self.produtores[index] = produtor
+                self.tableView.reloadData()
+            }
+            
+        },withCancel: nil)
         
         
     }

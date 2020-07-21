@@ -42,19 +42,33 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func loginButtonAction(_ sender: UIButton) {
         
         let loginManager = FirebaseAuthManager()
+        
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
         loginManager.signIn(email: email, pass: password) {[weak self] (success) in
             guard let `self` = self else { return }
             var message: String = ""
             if !success {
-                message = "Deu erro :("
+                message = "Ocorreu um erro, tente novamente"
                 let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                 self.present(alertController,animated: true)
                 return
             }
-            let tabController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainTab")
-            self.present(tabController, animated: true)
+            let userUID = Auth.auth().currentUser!.uid
+            let userRef = Database.database().reference().child("users").child(userUID)
+            
+            //para pegar o usuario PRINCIPAL/MEUPERFIL
+            userRef.observe(.value, with: { (snapshot) -> Void in
+                //let produtor = Produtor(snapshot: snapshot)
+                
+                let produtor = Produtor(snapshot: snapshot)
+                userProdutor = produtor
+                
+                let tabController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainTab")
+                self.present(tabController, animated: true)
+                
+            })
+            
             
         }
     }

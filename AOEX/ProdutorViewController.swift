@@ -18,6 +18,8 @@ class ProdutorViewController: UIViewController {
     @IBOutlet weak var wantAPL: UILabel!
     @IBOutlet weak var placeLabel: UILabel!
     
+    @IBOutlet weak var button: UIButton!
+    
     var produtor: Produtor?
     
     var solicitation: Solicitation?
@@ -38,10 +40,15 @@ class ProdutorViewController: UIViewController {
         productLabel.text = produtor?.product
         placeLabel.text = produtor?.city
         
+        check()
+        
+        
+        
+    }
+    func check(){
         if produtor!.solicitations.contains((userProdutor!.uid)!){
-            let ref = Database.database().reference().child("solicitations").child(userProdutor!.uid! + produtor!.uid!)
+            let ref = Database.database().reference().child("solicitations").child(produtor!.uid!).child(userProdutor!.uid!)
             ref.observeSingleEvent(of: .value, with: { snapshot in
-                print(snapshot.childrenCount)
                 
                 if let dictionary = snapshot.value as? [String: Any] {
                     let id = dictionary["id"] as? String ?? ""
@@ -53,43 +60,41 @@ class ProdutorViewController: UIViewController {
                     self.solicitation?.status = Solicitation.Status(rawValue: status!)!
                     
                     if self.solicitation!.status == .new{
-                        self.titleLabel.text = "BOOOOOM"
+                        self.button.backgroundColor = .lightGray
+                        self.button.setTitle("Esperando resposta", for: .normal)
+                    }
+                    else if self.solicitation!.status == .accepted{
+                        self.button.backgroundColor = .systemGreen
+                        self.button.setTitle("Entrar em contato", for: .normal)
                     }
                 }
             })
             
             
         }
-        else{
-            
-        }
-        
-        
     }
     
-    
     @IBAction func contact(_ sender: Any) {
-        print("huhu")
-        print(solicitation)
+        
         if solicitation == nil{
-            print("haha")
-            let solicitationRef = Database.database().reference().child("solicitations").child(userProdutor!.uid! + produtor!.uid!)
-            
+            let solicitationRef = Database.database().reference().child("solicitations").child(produtor!.uid!).child(userProdutor!.uid!)
+
             let data = [
                 "id": solicitationRef.key,
                 "solicitator": userProdutor!.uid,
                 "solicitee": produtor!.uid,
-                "status": String("0")
+                "status": String(0)
             ]
             solicitationRef.setValue(data)
             
             self.solicitation = Solicitation(id: solicitationRef.key!, uidSolicitator: userProdutor!.uid!, uidSolicitee: produtor!.uid!)
             
+            self.button.backgroundColor = .lightGray
+            self.button.setTitle("Esperando resposta", for: .normal)
+            
             let soliciteeRef = Database.database().reference().child("users").child(produtor!.uid!).child("solicitations")
-            print("ble")
             soliciteeRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 // Get user value
-                print(snapshot)
                 if var value = snapshot.value as? [String]{
                     
                     if value.isEmpty || (value.first == "0") {
@@ -111,7 +116,7 @@ class ProdutorViewController: UIViewController {
             })
             
         }
-        else{
+        else if solicitation?.status == .accepted{
             
             let phoneNumber =  "+55" + produtor!.phone!.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
             

@@ -27,6 +27,7 @@
 		35CF05BD249153CA009F3992 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CF05BC249153CA009F3992 /* ForgotPasswordViewController.swift */; };
 		35D32A2F24BE2EBD000FE84E /* Solicitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D32A2E24BE2EBC000FE84E /* Solicitation.swift */; };
 		35D32A3124C74B39000FE84E /* PerfilViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D32A3024C74B39000FE84E /* PerfilViewController.swift */; };
+		35D32A3324C7C975000FE84E /* SolicitatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D32A3224C7C975000FE84E /* SolicitatorViewController.swift */; };
 		6053A890DD4ED28E96DAC7D9 /* Pods_AOEX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3316FDB311FBC57E5B2512FB /* Pods_AOEX.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		35CF05BC249153CA009F3992 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		35D32A2E24BE2EBC000FE84E /* Solicitation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Solicitation.swift; sourceTree = "<group>"; };
 		35D32A3024C74B39000FE84E /* PerfilViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerfilViewController.swift; sourceTree = "<group>"; };
+		35D32A3224C7C975000FE84E /* SolicitatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolicitatorViewController.swift; sourceTree = "<group>"; };
 		6479914EC51EA2D626A2F8BE /* Pods-AOEX.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AOEX.release.xcconfig"; path = "Target Support Files/Pods-AOEX/Pods-AOEX.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,6 +108,7 @@
 				35CF05BA249153A2009F3992 /* NewAccountViewController.swift */,
 				35AA0FB3249EAB2000D9D27B /* ProdutorTableViewCell.swift */,
 				35C5169C2490273A00D5D569 /* Main.storyboard */,
+				35D32A3224C7C975000FE84E /* SolicitatorViewController.swift */,
 				35D32A3024C74B39000FE84E /* PerfilViewController.swift */,
 				35AA0FB5249EAD3000D9D27B /* Produtor.swift */,
 				35D32A2E24BE2EBC000FE84E /* Solicitation.swift */,
@@ -256,6 +259,7 @@
 				35C5169B2490273A00D5D569 /* LoginViewController.swift in Sources */,
 				35CF05BD249153CA009F3992 /* ForgotPasswordViewController.swift in Sources */,
 				35C896B52494180C000A8B39 /* MainTabBarController.swift in Sources */,
+				35D32A3324C7C975000FE84E /* SolicitatorViewController.swift in Sources */,
 				35AA0FB2249EAADF00D9D27B /* ProdutoresTableViewController.swift in Sources */,
 				35C516972490273A00D5D569 /* AppDelegate.swift in Sources */,
 				35C516992490273A00D5D569 /* SceneDelegate.swift in Sources */,

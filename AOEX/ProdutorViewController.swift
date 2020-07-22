@@ -46,39 +46,41 @@ class ProdutorViewController: UIViewController {
         
     }
     func check(){
-        if produtor!.solicitations.contains((userProdutor!.uid)!){
-            let ref = Database.database().reference().child("solicitations").child(produtor!.uid!).child(userProdutor!.uid!)
-            ref.observeSingleEvent(of: .value, with: { snapshot in
+        
+        let ref = Database.database().reference().child("solicitations").child(produtor!.uid!).child(userProdutor!.uid!)
+        ref.observeSingleEvent(of: .value, with: { snapshot in
+            
+            if let dictionary = snapshot.value as? [String: Any] {
+                let id = dictionary["id"] as? String ?? ""
+                let solicitatorId = dictionary["solicitator"] as? String ?? ""
+                let soliciteeId = dictionary["solicitee"] as? String ?? ""
+                let status = Int(dictionary["status"] as? String ?? "")
                 
-                if let dictionary = snapshot.value as? [String: Any] {
-                    let id = dictionary["id"] as? String ?? ""
-                    let solicitatorId = dictionary["solicitator"] as? String ?? ""
-                    let soliciteeId = dictionary["solicitee"] as? String ?? ""
-                    let status = Int(dictionary["status"] as? String ?? "")
-                    
-                    self.solicitation = Solicitation(id: id, uidSolicitator: solicitatorId, uidSolicitee: soliciteeId)
-                    self.solicitation?.status = Solicitation.Status(rawValue: status!)!
-                    
-                    if self.solicitation!.status == .new{
-                        self.button.backgroundColor = .lightGray
-                        self.button.setTitle("Esperando resposta", for: .normal)
-                    }
-                    else if self.solicitation!.status == .accepted{
-                        self.button.backgroundColor = .systemGreen
-                        self.button.setTitle("Entrar em contato", for: .normal)
-                    }
+                self.solicitation = Solicitation(id: id, uidSolicitator: solicitatorId, uidSolicitee: soliciteeId)
+                self.solicitation?.status = Solicitation.Status(rawValue: status!)!
+                
+                if self.solicitation!.status == .new{
+                    self.button.backgroundColor = .lightGray
+                    self.button.setTitle("Esperando resposta", for: .normal)
                 }
-            })
-            
-            
-        }
+                else if self.solicitation!.status == .accepted{
+                    self.button.backgroundColor = .systemGreen
+                    self.button.setTitle("Entrar em contato", for: .normal)
+                }
+                else if self.solicitation!.status == .refused{
+                    self.button.backgroundColor = .systemRed
+                    self.button.setTitle("Seu contato foi rejeitado", for: .normal)
+                }
+            }
+        })
+        
     }
     
     @IBAction func contact(_ sender: Any) {
         
         if solicitation == nil{
             let solicitationRef = Database.database().reference().child("solicitations").child(produtor!.uid!).child(userProdutor!.uid!)
-
+            
             let data = [
                 "id": solicitationRef.key,
                 "solicitator": userProdutor!.uid,
@@ -133,6 +135,9 @@ class ProdutorViewController: UIViewController {
                 alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
                 self.present(alertController, animated: true)
             }
+        }
+        else if solicitation?.status == .refused{
+            
         }
         
         

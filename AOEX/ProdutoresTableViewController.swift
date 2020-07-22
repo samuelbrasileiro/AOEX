@@ -42,7 +42,7 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
         
         
         self.observeChilds()
-
+        
         
     }
     
@@ -55,31 +55,31 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
             
             if userProdutor!.uid != produtor.uid && !self.produtores.contains(where: {produtor.uid == $0.uid}){
                 DispatchQueue.global(qos: .background).async {
+                    
+                    
+                    if produtor.imageURL != nil{
                         
                         
-                        if produtor.imageURL != nil{
+                        let url = NSURL(string: produtor.imageURL!)
+                        let data = NSData(contentsOf: url! as URL)
+                        if data != nil {
+                            produtor.image = UIImage(data: data! as Data)
                             
-                            
-                            let url = NSURL(string: produtor.imageURL!)
-                            let data = NSData(contentsOf: url! as URL)
-                            if data != nil {
-                                produtor.image = UIImage(data: data! as Data)
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
                                 
-                                DispatchQueue.main.async {
-                                    self.tableView.reloadData()
-                                    
-                                }
                             }
                         }
                     }
-                    self.produtores.append(produtor)
-                    self.produtores.sort{ userProdutor!.distance(from: $0) < userProdutor!.distance(from: $1)}
-                    
-                    
-                    
-                    let index = self.produtores.firstIndex{$0 === produtor}
-                    self.tableView.insertRows(at: [IndexPath(row: index!, section: 0)], with: UITableView.RowAnimation.automatic)
                 }
+                self.produtores.append(produtor)
+                self.produtores.sort{ userProdutor!.distance(from: $0) < userProdutor!.distance(from: $1)}
+                
+                
+                
+                let index = self.produtores.firstIndex{$0 === produtor}
+                self.tableView.insertRows(at: [IndexPath(row: index!, section: 0)], with: UITableView.RowAnimation.automatic)
+            }
             
         }, withCancel: nil)
         
@@ -146,58 +146,5 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
         return cell
     }
     
-    
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
-    
-    /*
-     // Override to support editing the table view.
-     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-     if editingStyle == .delete {
-     // Delete the row from the data source
-     tableView.deleteRows(at: [indexPath], with: .fade)
-     } else if editingStyle == .insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
-    
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
-    
-    
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    //        if segue.identifier == "produtorSegue"{
-    //
-    //            if let _ = segue.destination as? ProdutorViewController {
-    //
-    //                let selectCell = tableView.indexPathForSelectedRow?.row
-    //                let produtor = produtores[selectCell!]
-    //                print(produtor.name)
-    //
-    //            }
-    //        }
-    //    }
-    //
     
 }

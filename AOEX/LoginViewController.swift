@@ -16,6 +16,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var passwordTextField: UITextField!
     
+    @IBOutlet weak var loginButton: UIButton!
     override func viewWillAppear(_ animated: Bool) {
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
           // ...
@@ -33,9 +34,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        end()
-        return true
+        
+        if textField == passwordTextField{
+            loginButtonAction(loginButton)
+            end()
+            return true
+        }
+        else if textField == emailTextField{
+            passwordTextField.becomeFirstResponder()
+            return false
+        }
+        return false
     }
+    
     @objc func end(){
         self.view.endEditing(true)
     }
@@ -63,6 +74,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 
                 let produtor = Produtor(snapshot: snapshot)
                 userProdutor = produtor
+                
+                
                 
                 let tabController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainTab")
                 self.present(tabController, animated: true)

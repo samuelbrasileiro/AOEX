@@ -24,7 +24,7 @@ class ProdutorTableViewCell: UITableViewCell {
         super.awakeFromNib()
         userImage.layer.masksToBounds = true
         userImage.layer.cornerRadius = userImage.bounds.midX
-        userImage.isHidden = false
+        
         userImage.contentMode = .scaleAspectFill
     }
 

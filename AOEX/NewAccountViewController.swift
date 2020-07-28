@@ -42,6 +42,7 @@ class NewAccountViewController: UIViewController{
         cityTextField.delegate = self
         stateTextField.delegate = self
         
+        
         let gesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissEditing))
         self.view.addGestureRecognizer(gesture)
         
@@ -60,9 +61,29 @@ class NewAccountViewController: UIViewController{
         
         userImageView.layer.masksToBounds = true
         userImageView.layer.cornerRadius = userImageView.bounds.midX
-        userImageView.isHidden = true
+        userImageView.isHidden = false
         userImageView.contentMode = .scaleAspectFill
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
     }
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if var keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            keyboardSize.size.height -= 170
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+    
     func dismissAndClosePickerView(){
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
@@ -140,8 +161,8 @@ class NewAccountViewController: UIViewController{
             }
             
             
-            let tabController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainTab")
-            self.present(tabController, animated: true)
+            let bioVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "bioViewController")
+            self.present(bioVC, animated: true)
 
             
         }
@@ -282,8 +303,16 @@ extension NewAccountViewController: UIPickerViewDelegate, UIPickerViewDataSource
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        dismissEditing()
-        return true
+        
+        if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
+           nextField.becomeFirstResponder()
+        } else {
+           // Not found, so remove keyboard.
+           dismissEditing()
+           return true
+        }
+        // Do not add a line break
+        return false
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {

@@ -52,7 +52,7 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
         ref.observe(.childAdded, with: { (snapshot) -> Void in
             //print(snapshot)
             let produtor = Produtor(snapshot: snapshot)
-            
+            produtor.image = UIImage(named: "default-user")
             if userProdutor!.uid != produtor.uid && !self.produtores.contains(where: {produtor.uid == $0.uid}){
                 DispatchQueue.global(qos: .background).async {
                     
@@ -128,7 +128,7 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
         selectedBackgroundView.backgroundColor = .clear
         cell.selectedBackgroundView = selectedBackgroundView
         
-        cell.userImage.image = nil
+        
         if let image = produtores[indexPath.row].image{
             cell.userImage.image = image
         }

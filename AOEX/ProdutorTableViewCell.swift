@@ -19,13 +19,22 @@ class ProdutorTableViewCell: UITableViewCell {
     @IBOutlet weak var placeLabel: UILabel!
     @IBOutlet weak var userImage: UIImageView!
     
+    @IBOutlet weak var baseView: UIView!
+    
     var delegate: ProdutorCellDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()
         userImage.layer.masksToBounds = true
-        userImage.layer.cornerRadius = userImage.bounds.midX
+        userImage.layer.cornerRadius = userImage.frame.width/2
         
         userImage.contentMode = .scaleAspectFill
+        
+        if self.traitCollection.userInterfaceStyle == .dark{
+            baseView.backgroundColor = .black
+        }
+        else{
+            baseView.backgroundColor = .white
+        }
     }
 
     @IBAction func knowMoreButtonTapped(_ sender: Any) {

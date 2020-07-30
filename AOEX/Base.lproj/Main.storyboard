@@ -33,7 +33,6 @@
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="samuelbsantosn@gmail.com" borderStyle="roundedRect" placeholder="E-mail" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xrv-8a-NVX">
                                 <rect key="frame" x="38" y="415" width="339" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardAppearance="light" returnKeyType="continue" enablesReturnKeyAutomatically="YES" textContentType="email"/>
                             </textField>
@@ -351,6 +350,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.95294117649999999" green="0.95294117649999999" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <connections>
+                                            <outlet property="baseView" destination="fQw-D3-l5C" id="wGD-DO-qZu"/>
                                             <outlet property="name" destination="s22-hy-vQ2" id="8md-nO-6Wp"/>
                                             <outlet property="placeLabel" destination="bHU-Yf-vYw" id="cfO-tk-DHw"/>
                                             <outlet property="product" destination="A3o-Je-NBR" id="IdF-wv-72U"/>
@@ -810,7 +810,7 @@ sobre você</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6qF-DG-GYE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2672" y="134"/>
+            <point key="canvasLocation" x="2538" y="134"/>
         </scene>
     </scenes>
     <resources>

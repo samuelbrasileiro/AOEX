@@ -118,6 +118,7 @@ class PerfilViewController: UIViewController {
         
         solicitationTableView.frame = CGRect(x: 0, y: 50, width: self.solicitationsControl.frame.size.width, height: CGFloat(userProdutor!.solicitations.count)*80)
         solicitationTableView.register(SolicitationTableViewCell.self, forCellReuseIdentifier: "solicitationCell")
+        self.solicitationTableView.separatorStyle = .singleLine
         
         solicitationTableView.delegate = self
         solicitationTableView.dataSource = self
@@ -175,14 +176,16 @@ class PerfilViewController: UIViewController {
         connectionsButton.setTitleColor(#colorLiteral(red: 0.3364960849, green: 0.3365047574, blue: 0.3365000486, alpha: 1), for: .normal)
         connectionsButton.setTitle("Ver solicitações aprovadas por você (\(connections.count))", for: .normal)
         connectionsControl.addSubview(connectionsButton)
-        
+
+
         
         connectionTableView.frame = CGRect(x: 0, y: 50, width: self.connectionsControl.frame.size.width, height: CGFloat(connections.count*80))
         connectionTableView.register(SolicitationTableViewCell.self, forCellReuseIdentifier: "solicitationCell")
         
         connectionTableView.delegate = self
         connectionTableView.dataSource = self
-        
+        connectionTableView.separatorStyle = .singleLine
+
         connectionTableView.backgroundColor = .clear
         connectionsControl.addSubview(connectionTableView)
         

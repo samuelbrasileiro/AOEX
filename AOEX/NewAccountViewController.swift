@@ -29,6 +29,7 @@ class NewAccountViewController: UIViewController{
     
     let statesBank = StatesBrazil()
     
+    var photoHasBeenPicked = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -186,9 +187,9 @@ class NewAccountViewController: UIViewController{
             vc.sourceType = .photoLibrary
             self.present(vc, animated: true)
         }))
-        if userImageView.image != nil{
+        if photoHasBeenPicked{
             actionSheet.addAction(UIAlertAction(title: "Apagar a foto", style: .destructive, handler: {(action:UIAlertAction) in
-                self.userImageView.image = nil
+                self.userImageView.image = UIImage(named: "default-user")
                 
                 
             }))
@@ -298,7 +299,7 @@ extension NewAccountViewController: UIPickerViewDelegate, UIPickerViewDataSource
         }
         
         userImageView.image = image
-        userImageView.isHidden = false
+        photoHasBeenPicked = true
         imageButton.setTitle("Alterar imagem", for: .normal)
     }
     

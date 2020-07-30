@@ -40,7 +40,20 @@ class ProdutorViewController: UIViewController {
         productLabel.text = produtor?.product
         placeLabel.text = produtor?.city
         
-        check()
+        let ref = Database.database().reference().child("users").child(userProdutor!.uid!).child("connections")
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let connections = snapshot.value as? [String]{
+                if connections.contains(self.produtor!.uid!){
+                    self.solicitation = Solicitation(id: "000", uidSolicitator: userProdutor!.uid!, uidSolicitee: self.produtor!.uid!)
+                    self.solicitation?.status = .accepted
+                    self.button.backgroundColor = .systemGreen
+                    self.button.setTitle("Entrar em contato", for: .normal)
+                    return
+                }
+            }
+            self.check()
+        })
+        
         
         
         
@@ -77,6 +90,7 @@ class ProdutorViewController: UIViewController {
     }
     
     @IBAction func contact(_ sender: Any) {
+        
         
         if solicitation == nil{
             let solicitationRef = Database.database().reference().child("solicitations").child(produtor!.uid!).child(userProdutor!.uid!)

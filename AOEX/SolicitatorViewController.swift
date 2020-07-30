@@ -53,6 +53,8 @@ class SolicitatorViewController: UIViewController {
     @IBAction func buttonAction(_ sender: UIButton) {
         if let index = userProdutor!.solicitations.firstIndex(where: {produtor!.uid! == $0}){
             userProdutor!.solicitations.remove(at: index)
+            removeDelegate?.removeSolicitator(solicitator: produtor!.uid!)
+            navigationController?.popViewController(animated: true)
             
             let statusRef = Database.database().reference().child("solicitations").child(userProdutor!.uid!).child(produtor!.uid!).child("status")
             if sender == rejectButton{
@@ -60,13 +62,52 @@ class SolicitatorViewController: UIViewController {
             }
             else if sender == acceptButton{
                 statusRef.setValue(String(Solicitation.Status.accepted.rawValue))
+                
+                for uid in [userProdutor!.uid!, produtor!.uid!]{
+                    let ref = Database.database().reference().child("users").child(uid).child("connections")
+                    ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                        // Get user value
+                        
+                        if var value = snapshot.value as? [String]{
+                            
+                            if value.isEmpty {
+                                value = []
+                            }
+                            
+                            if uid == userProdutor!.uid!{
+                                value.append(self.produtor!.uid!)
+                            }
+                            else{
+                                value.append(userProdutor!.uid!)
+                            }
+                            
+                            ref.setValue(value)
+                            
+                        }
+                        else{
+                            var value: [String] = []
+                            
+                            if uid == userProdutor!.uid!{
+                                value.append(self.produtor!.uid!)
+                            }
+                            else{
+                                value.append(userProdutor!.uid!)
+                            }
+                            
+                            ref.setValue(value)
+                        }
+                    })
+                    
+                }
+                
+                
             }
             let solicitationsRef = Database.database().reference().child("users").child(userProdutor!.uid!).child("solicitations")
             solicitationsRef.setValue(userProdutor!.solicitations)
             
             
         }
-        removeDelegate?.removeSolicitator(solicitator: produtor!.uid!)
+        
         
     }
     

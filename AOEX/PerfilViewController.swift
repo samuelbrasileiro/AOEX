@@ -15,16 +15,23 @@ class PerfilViewController: UIViewController {
     
     let solicitationsControl = UIControl()
     
+    let connectionsControl = UIControl()
+    
     let scrollView = UIScrollView()
     
     let inicialHeight = 50
     
     let solicitationTableView = UITableView()
     
+    let connectionTableView = UITableView()
+    
     var solicitators: [Produtor] = []
     
-    var solicitatorsButton = UIButton()
+    var connections: [Produtor] = []
     
+    let solicitatorsButton = UIButton()
+    
+    let connectionsButton = UIButton()
     
     override func viewDidLoad() {
         navigationController?.navigationBar.isHidden = true
@@ -76,6 +83,7 @@ class PerfilViewController: UIViewController {
         scrollView.addSubview(solicitationsControl)
         scrollView.addSubview(image)
         scrollView.addSubview(greetingsLabel)
+        scrollView.addSubview(connectionsControl)
         
         view.addSubview(scrollView)
         
@@ -84,9 +92,19 @@ class PerfilViewController: UIViewController {
         scrollView.contentSize = scrollView.frame.size
         
         configureControl()
+        
+        configureConnections()
+        
+        let contentRect: CGRect = scrollView.subviews.reduce(into: .zero) { rect, view in
+            rect = rect.union(view.frame)
+        }
+        scrollView.contentSize.height = contentRect.height + 10
+        scrollView.setContentOffset(CGPoint(x: 0,y: 0), animated: false)
     }
+    
     func configureControl(){
         solicitationsControl.frame = CGRect(x: 20, y: 557, width: self.scrollView.frame.width - 40, height: 50)
+        
         solicitatorsButton.addTarget(self, action: #selector(solicitationsButtonAction), for: .touchUpInside)
         solicitationsControl.layer.masksToBounds = true
         solicitationsControl.layer.cornerRadius = 10
@@ -144,18 +162,100 @@ class PerfilViewController: UIViewController {
         
         
     }
-    
+    func configureConnections(){
+        connectionsControl.frame = CGRect(x: 20, y: self.solicitationsControl.frame.maxY + 30, width: self.scrollView.frame.width - 40, height: 50)
+        
+        
+        connectionsButton.addTarget(self, action: #selector(connectionsButtonAction), for: .touchUpInside)
+        connectionsControl.layer.masksToBounds = true
+        connectionsControl.layer.cornerRadius = 10
+        connectionsControl.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        
+        connectionsButton.frame = CGRect(x: 5, y: 10, width: 330, height: 30)
+        connectionsButton.setTitleColor(#colorLiteral(red: 0.3364960849, green: 0.3365047574, blue: 0.3365000486, alpha: 1), for: .normal)
+        connectionsButton.setTitle("Ver solicitações aprovadas por você (\(connections.count))", for: .normal)
+        connectionsControl.addSubview(connectionsButton)
+        
+        
+        connectionTableView.frame = CGRect(x: 0, y: 50, width: self.connectionsControl.frame.size.width, height: CGFloat(connections.count*80))
+        connectionTableView.register(SolicitationTableViewCell.self, forCellReuseIdentifier: "solicitationCell")
+        
+        connectionTableView.delegate = self
+        connectionTableView.dataSource = self
+        
+        connectionTableView.backgroundColor = .clear
+        connectionsControl.addSubview(connectionTableView)
+        
+        let ref = Database.database().reference().child("users").child(userProdutor!.uid!).child("connections")
+            
+        ref.observe(.childAdded, with: { (snapshot) -> Void in
+            
+            if let uid = snapshot.value as? String {
+                print(uid)
+                print("ohana")
+                let ref = Database.database().reference().child("users").child(uid)
+                ref.observeSingleEvent(of: .value, with: { (snapshot) -> Void in
+                    let produtor = Produtor(snapshot: snapshot)
+                    self.connections.append(produtor)
+                    self.connectionTableView.frame.size.height = CGFloat(self.connections.count*80)
+                    self.connectionsButton.setTitle("Ver solicitações aprovadas por você (\(self.connections.count))", for: .normal)
+                    if self.connectionsControl.frame.size.height > 50{
+                        self.connectionsControl.frame.size.height += 80
+                    }
+                    self.connectionTableView.reloadData()
+                    
+                    let contentRect: CGRect = self.scrollView.subviews.reduce(into: .zero) { rect, view in
+                        rect = rect.union(view.frame)
+                    }
+                    self.scrollView.contentSize.height = contentRect.height + 10
+                    
+                    DispatchQueue.global(qos: .background).async {
+                        
+                        
+                        if produtor.imageURL != nil{
+                            
+                            
+                            let url = NSURL(string: produtor.imageURL!)
+                            let data = NSData(contentsOf: url! as URL)
+                            if data != nil {
+                                produtor.image = UIImage(data: data! as Data)
+                                
+                                DispatchQueue.main.async {
+                                    self.connectionTableView.reloadData()
+                                    
+                                }
+                            }
+                        }
+                    }
+                    
+                })
+                
+                
+                
+                
+            }
+            
+        })
+        
+        
+        
+        
+    }
     
     @objc func solicitationsButtonAction(){
         
         if solicitationsControl.frame.size.height == 50{
             UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
                 self.solicitationsControl.frame.size.height += self.solicitationTableView.frame.height
+                
+                self.connectionsControl.frame.origin.y = self.solicitationsControl.frame.maxY + 30
             }, completion: nil)
         }
         else{
             UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
                 self.solicitationsControl.frame.size.height = 50
+                
+                self.connectionsControl.frame.origin.y = self.solicitationsControl.frame.maxY + 30
             }, completion: nil)
         }
         
@@ -164,7 +264,31 @@ class PerfilViewController: UIViewController {
             rect = rect.union(view.frame)
         }
         scrollView.contentSize.height = contentRect.height + 10
-        scrollView.setContentOffset(CGPoint(x: 0,y: 0), animated: false)
+        //scrollView.setContentOffset(CGPoint(x: 0,y: 0), animated: false)
+        
+        
+        
+    }
+    
+    @objc func connectionsButtonAction(){
+        
+        if connectionsControl.frame.size.height == 50{
+            UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
+                self.connectionsControl.frame.size.height += self.connectionTableView.frame.height
+            }, completion: nil)
+        }
+        else{
+            UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
+                self.connectionsControl.frame.size.height = 50
+            }, completion: nil)
+        }
+        
+        
+        let contentRect: CGRect = scrollView.subviews.reduce(into: .zero) { rect, view in
+            rect = rect.union(view.frame)
+        }
+        scrollView.contentSize.height = contentRect.height + 10
+        //scrollView.setContentOffset(CGPoint(x: 0,y: 0), animated: false)
         
         
         
@@ -185,14 +309,17 @@ extension PerfilViewController: UITableViewDelegate, UITableViewDataSource, remo
             self.solicitators.remove(at: index)
             solicitatorsButton.setTitle("Ver solicitações pendentes (\(solicitators.count))", for: .normal)
             self.solicitationTableView.reloadData()
+            self.solicitationTableView.frame.size.height -= 80
             UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
                 self.solicitationsControl.frame.size.height -= 80
+                self.connectionsControl.frame.origin.y = self.solicitationsControl.frame.maxY + 30
             })
         }
         if let index = userProdutor!.solicitations.firstIndex(where: {$0 == solicitator}){
             
             userProdutor!.solicitations.remove(at: index)
         }
+        
         
     }
     
@@ -201,7 +328,7 @@ extension PerfilViewController: UITableViewDelegate, UITableViewDataSource, remo
             return solicitators.count
         }
         else {
-            return 0
+            return connections.count
             
         }
     }
@@ -214,7 +341,10 @@ extension PerfilViewController: UITableViewDelegate, UITableViewDataSource, remo
             navigationController?.pushViewController(vc, animated: true)
         }
         else{
+            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "produtorView") as! ProdutorViewController
+            vc.produtor = connections[indexPath.row]
             
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
     
@@ -223,26 +353,29 @@ extension PerfilViewController: UITableViewDelegate, UITableViewDataSource, remo
             return 80
         }
         else{
-            return 0
+            return 80
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var produtor: Produtor
         if tableView == solicitationTableView{
+            produtor = solicitators[indexPath.row]
+        }
+        else{
+            produtor = connections[indexPath.row]
+        }
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "solicitationCell", for: indexPath) as? SolicitationTableViewCell else {fatalError("The dequeued cell is not an instance of SolicitationTableViewCell.")}
-            let solicitator = solicitators[indexPath.row]
             
-            cell.name.text = solicitator.name
-            cell.userImage.image = solicitator.image
+            
+            cell.name.text = produtor.name
+            cell.userImage.image = produtor.image
             cell.backgroundColor = .clear
             let selectedBackgroundView = UIView()
             selectedBackgroundView.backgroundColor = .clear
             cell.selectedBackgroundView = selectedBackgroundView
             return cell
-        }
-        else{
-            return UITableViewCell()
-        }
+        
     }
     
 }

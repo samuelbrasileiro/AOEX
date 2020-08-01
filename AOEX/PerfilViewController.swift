@@ -54,7 +54,7 @@ class PerfilViewController: UIViewController {
                     let url = NSURL(string: imageURL)
                     let data = NSData(contentsOf: url! as URL)
                     if data != nil {
-                        print("haha")
+                        
                         userProdutor!.image = UIImage(data: data! as Data)
                         DispatchQueue.main.async {
                             self.image.image = userProdutor!.image
@@ -65,19 +65,20 @@ class PerfilViewController: UIViewController {
         }
         
         let menuLabel = UILabel(frame: CGRect(x: 83, y: 56, width: 248, height: 62))
-        menuLabel.textColor = #colorLiteral(red: 0.3364960849, green: 0.3365047574, blue: 0.3365000486, alpha: 1)
+        menuLabel.textColor = .systemGray
         menuLabel.font = menuLabel.font.withSize(50)
         menuLabel.text = "Menu"
         menuLabel.textAlignment = .center
         
         
         let greetingsLabel = UILabel(frame: CGRect(x: 20, y: 300, width: scrollView.frame.size.width - 40, height: 200))
-        greetingsLabel.textColor = #colorLiteral(red: 0.3364960849, green: 0.3365047574, blue: 0.3365000486, alpha: 1)
+        greetingsLabel.textColor = .systemGray
         greetingsLabel.numberOfLines = 3
         greetingsLabel.font = menuLabel.font.withSize(50)
-        greetingsLabel.backgroundColor = .systemBlue
+        
         greetingsLabel.text = "Olá, " + userProdutor!.name! + "!"
         greetingsLabel.textAlignment = .center
+        greetingsLabel.adjustsFontSizeToFitWidth = true
         
         scrollView.addSubview(menuLabel)
         scrollView.addSubview(solicitationsControl)
@@ -108,10 +109,10 @@ class PerfilViewController: UIViewController {
         solicitatorsButton.addTarget(self, action: #selector(solicitationsButtonAction), for: .touchUpInside)
         solicitationsControl.layer.masksToBounds = true
         solicitationsControl.layer.cornerRadius = 10
-        solicitationsControl.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        solicitationsControl.backgroundColor = .systemGray3
         
         solicitatorsButton.frame = CGRect(x: 5, y: 10, width: 300, height: 30)
-        solicitatorsButton.setTitleColor(#colorLiteral(red: 0.3364960849, green: 0.3365047574, blue: 0.3365000486, alpha: 1), for: .normal)
+        solicitatorsButton.setTitleColor(.systemGray, for: .normal)
         solicitatorsButton.setTitle("Ver solicitações pendentes (\(userProdutor!.solicitations.count))", for: .normal)
         solicitationsControl.addSubview(solicitatorsButton)
         
@@ -170,10 +171,10 @@ class PerfilViewController: UIViewController {
         connectionsButton.addTarget(self, action: #selector(connectionsButtonAction), for: .touchUpInside)
         connectionsControl.layer.masksToBounds = true
         connectionsControl.layer.cornerRadius = 10
-        connectionsControl.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+        connectionsControl.backgroundColor = .systemGray3
         
         connectionsButton.frame = CGRect(x: 5, y: 10, width: 330, height: 30)
-        connectionsButton.setTitleColor(#colorLiteral(red: 0.3364960849, green: 0.3365047574, blue: 0.3365000486, alpha: 1), for: .normal)
+        connectionsButton.setTitleColor(.systemGray, for: .normal)
         connectionsButton.setTitle("Ver solicitações aprovadas por você (\(connections.count))", for: .normal)
         connectionsControl.addSubview(connectionsButton)
 
@@ -194,8 +195,7 @@ class PerfilViewController: UIViewController {
         ref.observe(.childAdded, with: { (snapshot) -> Void in
             
             if let uid = snapshot.value as? String {
-                print(uid)
-                print("ohana")
+                
                 let ref = Database.database().reference().child("users").child(uid)
                 ref.observeSingleEvent(of: .value, with: { (snapshot) -> Void in
                     let produtor = Produtor(snapshot: snapshot)
@@ -294,10 +294,6 @@ class PerfilViewController: UIViewController {
         //scrollView.setContentOffset(CGPoint(x: 0,y: 0), animated: false)
         
         
-        
-    }
-    
-    @IBAction func editButtonAction(_ sender: Any) {
         
     }
     
@@ -400,7 +396,7 @@ class SolicitationTableViewCell: UITableViewCell {
         userImage.layer.cornerRadius = userImage.frame.height/2
         
         name.frame = CGRect(x: 100, y: 20, width: 200, height: 40)
-        
+        name.textColor = .systemGray
         addSubview(userImage)
         addSubview(name)
     }

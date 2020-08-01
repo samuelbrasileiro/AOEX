@@ -15,15 +15,18 @@ class SolicitatorViewController: UIViewController {
 
     var removeDelegate: removeSolicitatorDelegate?
         
+    @IBOutlet var userImage: UIImageView!
+    
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var productLabel: UILabel!
-    @IBOutlet weak var wantAPL: UILabel!
     @IBOutlet weak var placeLabel: UILabel!
+    @IBOutlet weak var websiteLabel: UILabel!
     
     @IBOutlet weak var acceptButton: UIButton!
     @IBOutlet weak var rejectButton: UIButton!
+    
+    @IBOutlet var bioTextView: UITextView!
     
     var produtor: Produtor?
     
@@ -41,12 +44,25 @@ class SolicitatorViewController: UIViewController {
         }
         
         titleLabel.text = produtor?.name
-        nameLabel.text = produtor?.name
         distanceLabel.text = produtor?.state?.name
         productLabel.text = produtor?.product
         placeLabel.text = produtor?.city
+        userImage.image = produtor?.image
+        websiteLabel.text = produtor?.site ?? ""
+        bioTextView.isEditable = false
+        let bioRef = Database.database().reference().child("users").child(produtor!.uid!).child("bio")
+        bioRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let bio = snapshot.value as? String{
+                
+                self.bioTextView.text = bio
+            }
+            else{
+                self.bioTextView.text = "O usuário não cadastrou uma bio"
+            }
+        })
         
-        
+        userImage.layer.masksToBounds = true
+        userImage.layer.cornerRadius = userImage.frame.width/2
         
     }
     

@@ -33,7 +33,7 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
         let bc = UIImageView(frame: view.frame)
         bc.contentMode = .scaleAspectFill
         bc.image = UIImage(named: "background")
-        bc.backgroundColor = UIColor(red: 0xF3/0xFF, green: 0xF3/0xFF, blue: 0xF3/0xFF, alpha: 1)
+        
         self.view.addSubview(bc)
         self.view.sendSubviewToBack(bc)
         
@@ -122,7 +122,7 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "produtorCell", for: indexPath) as? ProdutorTableViewCell else {fatalError("The dequeued cell is not an instance of ProdutorTableViewCell.")}
         cell.delegate = self
-        cell.addSeparator(at: .right, color: .lightGray)
+        
         cell.backgroundColor = .clear
         let selectedBackgroundView = UIView()
         selectedBackgroundView.backgroundColor = .clear

@@ -12,13 +12,16 @@ import Firebase
 class ProdutorViewController: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var productLabel: UILabel!
-    @IBOutlet weak var wantAPL: UILabel!
     @IBOutlet weak var placeLabel: UILabel!
+    @IBOutlet var websiteLabel: UILabel!
     
+    @IBOutlet var userImage: UIImageView!
+
     @IBOutlet weak var button: UIButton!
+    
+    @IBOutlet var bioTextView: UITextView!
     
     var produtor: Produtor?
     
@@ -35,10 +38,30 @@ class ProdutorViewController: UIViewController {
         }
         
         titleLabel.text = produtor?.name
-        nameLabel.text = produtor?.name
         distanceLabel.text = produtor?.state?.name
         productLabel.text = produtor?.product
         placeLabel.text = produtor?.city
+        websiteLabel.text = produtor?.site ?? ""
+        
+        userImage.image = produtor?.image
+        userImage.layer.masksToBounds = true
+        userImage.layer.cornerRadius = userImage.frame.width/2
+        
+        
+        bioTextView.isEditable = false
+        let bioRef = Database.database().reference().child("users").child(produtor!.uid!).child("bio")
+        bioRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let bio = snapshot.value as? String{
+                
+                self.bioTextView.text = bio
+            }
+            else{
+                self.bioTextView.text = "O usuário não cadastrou uma bio"
+            }
+        })
+        
+        
+        
         
         let ref = Database.database().reference().child("users").child(userProdutor!.uid!).child("connections")
         ref.observeSingleEvent(of: .value, with: { (snapshot) in

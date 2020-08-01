@@ -49,6 +49,10 @@ class BioViewController: UIViewController, UITextViewDelegate {
         self.present(tabController, animated: true)
     }
     
+    @IBAction func jumpButtonAction(_ sender: Any) {
+        let tabController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainTab")
+        self.present(tabController, animated: true)
+    }
     /*
     // MARK: - Navigation
 

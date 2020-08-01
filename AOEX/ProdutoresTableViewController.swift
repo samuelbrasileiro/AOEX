@@ -28,7 +28,7 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
         tableView.backgroundColor = .clear
         view.addSubview(UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 82)))
         
-        navigationController?.navigationBar.isHidden = true
+        //navigationController?.navigationBar.isHidden = true
         
         let bc = UIImageView(frame: view.frame)
         bc.contentMode = .scaleAspectFill

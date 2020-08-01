@@ -34,7 +34,7 @@ class PerfilViewController: UIViewController {
     let connectionsButton = UIButton()
     
     override func viewDidLoad() {
-        navigationController?.navigationBar.isHidden = true
+        //navigationController?.navigationBar.isHidden = true
         
         super.viewDidLoad()
         scrollView.frame = self.view.frame
@@ -64,23 +64,23 @@ class PerfilViewController: UIViewController {
             }
         }
         
-        let menuLabel = UILabel(frame: CGRect(x: 83, y: 56, width: 248, height: 62))
-        menuLabel.textColor = .systemGray
-        menuLabel.font = menuLabel.font.withSize(50)
-        menuLabel.text = "Menu"
-        menuLabel.textAlignment = .center
+//        let menuLabel = UILabel(frame: CGRect(x: 83, y: 56, width: 248, height: 62))
+//        menuLabel.textColor = .systemGray
+//        menuLabel.font = menuLabel.font.withSize(50)
+//        menuLabel.text = "Menu"
+//        menuLabel.textAlignment = .center
         
         
         let greetingsLabel = UILabel(frame: CGRect(x: 20, y: 300, width: scrollView.frame.size.width - 40, height: 200))
         greetingsLabel.textColor = .systemGray
         greetingsLabel.numberOfLines = 3
-        greetingsLabel.font = menuLabel.font.withSize(50)
+        greetingsLabel.font = greetingsLabel.font.withSize(50)
         
         greetingsLabel.text = "Olá, " + userProdutor!.name! + "!"
         greetingsLabel.textAlignment = .center
         greetingsLabel.adjustsFontSizeToFitWidth = true
         
-        scrollView.addSubview(menuLabel)
+        //scrollView.addSubview(menuLabel)
         scrollView.addSubview(solicitationsControl)
         scrollView.addSubview(image)
         scrollView.addSubview(greetingsLabel)

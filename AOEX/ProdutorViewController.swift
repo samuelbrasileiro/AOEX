@@ -29,10 +29,10 @@ class ProdutorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isHidden = false
-        let backButton = UIBarButtonItem()
-        backButton.title = "Voltar"
-        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
+        //navigationController?.navigationBar.isHidden = false
+        //let backButton = UIBarButtonItem()
+        //backButton.title = "Voltar"
+        //self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         guard produtor != nil else{
             fatalError()
         }
@@ -184,7 +184,7 @@ class ProdutorViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool){
         super.viewWillDisappear(animated);
         if self.isMovingFromParent{
-            navigationController?.navigationBar.isHidden = true
+            //navigationController?.navigationBar.isHidden = true
         }
         if self.isMovingToParent{
         }

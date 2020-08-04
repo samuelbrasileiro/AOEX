@@ -8,6 +8,8 @@
 
 import UIKit
 import Firebase
+import Security
+import KeychainSwift
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     var handle: AuthStateDidChangeListenerHandle?
@@ -17,9 +19,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var passwordTextField: UITextField!
     
     @IBOutlet weak var loginButton: UIButton!
+    
     override func viewWillAppear(_ animated: Bool) {
         handle = Auth.auth().addStateDidChangeListener { (auth, user) in
-          // ...
+
         }
         
     }
@@ -29,8 +32,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         emailTextField.delegate = self
         passwordTextField.delegate = self
         let gesture = UITapGestureRecognizer(target: self, action: #selector(end))
-        
         self.view.addGestureRecognizer(gesture)
+        
+        
+        let keychain = KeychainSwift()
+        keychain.accessGroup = "1524880673samuel.AOEX"
+        if let email = keychain.get("email"),
+            let password = keychain.get("password") {
+            emailTextField.text = email
+            passwordTextField.text = password
+        }
+        
+        
         
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -50,9 +63,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func end(){
         self.view.endEditing(true)
     }
+    
+    
+    
     @IBAction func loginButtonAction(_ sender: UIButton) {
         
         let loginManager = FirebaseAuthManager()
+        
+        
         
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
         loginManager.signIn(email: email, pass: password) {[weak self] (success) in
@@ -65,6 +83,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.present(alertController,animated: true)
                 return
             }
+            
+            
+                
+            let keychain = KeychainSwift()
+            keychain.accessGroup = "1524880673samuel.AOEX"
+            keychain.set(email, forKey: "email")
+            keychain.set(password, forKey: "password")
+            
             let userUID = Auth.auth().currentUser!.uid
             let userRef = Database.database().reference().child("users").child(userUID)
             

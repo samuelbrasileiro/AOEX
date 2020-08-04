@@ -98,10 +98,17 @@ class ProdutorsViewController: UIViewController, ProdutorCellDelegate, UITableVi
     func knowMoreButtonTapped(cell: ProdutorTableViewCell) {
         //Get the indexpath of cell where button was tapped
         let indexPath = self.tableView.indexPath(for: cell)
+        if (userProdutor!.solicitations.contains(produtores[indexPath!.row].uid!)){
+            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "solicitatorViewController") as! SolicitatorViewController
+            vc.produtor = produtores[indexPath!.row]
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        else{
+            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "produtorView") as! ProdutorViewController
+            vc.produtor = produtores[indexPath!.row]
+            navigationController?.pushViewController(vc, animated: true)
+        }
         
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "produtorView") as! ProdutorViewController
-        vc.produtor = produtores[indexPath!.row]
-        navigationController?.pushViewController(vc, animated: true)
     }
     
     // MARK: - Table view data source

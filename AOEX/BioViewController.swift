@@ -18,6 +18,10 @@ class BioViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         textView.delegate = self
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(end))
+        self.view.addGestureRecognizer(gesture)
+        
         // Do any additional setup after loading the view.
         placeholderLabel = UILabel()
         placeholderLabel.text = "Escreva aqui"
@@ -27,9 +31,15 @@ class BioViewController: UIViewController, UITextViewDelegate {
         placeholderLabel.frame.origin = CGPoint(x: 5, y: (textView.font?.pointSize)! / 2)
         placeholderLabel.textColor = UIColor.lightGray
         placeholderLabel.isHidden = !textView.text.isEmpty
+        
+        
+    }
+    @objc func end(){
+        self.view.endEditing(true)
     }
 
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        self.view.endEditing(true)
         return true
     }
     

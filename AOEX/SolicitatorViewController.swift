@@ -63,6 +63,7 @@ class SolicitatorViewController: UIViewController {
         
         userImage.layer.masksToBounds = true
         userImage.layer.cornerRadius = userImage.frame.width/2
+        userImage.contentMode = .scaleAspectFill
         
     }
     

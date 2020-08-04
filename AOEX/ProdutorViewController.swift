@@ -46,7 +46,7 @@ class ProdutorViewController: UIViewController {
         userImage.image = produtor?.image
         userImage.layer.masksToBounds = true
         userImage.layer.cornerRadius = userImage.frame.width/2
-        
+        userImage.contentMode = .scaleAspectFill
         
         bioTextView.isEditable = false
         let bioRef = Database.database().reference().child("users").child(produtor!.uid!).child("bio")

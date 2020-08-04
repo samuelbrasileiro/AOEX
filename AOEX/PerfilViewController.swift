@@ -33,6 +33,7 @@ class PerfilViewController: UIViewController {
     
     let connectionsButton = UIButton()
     
+    var removedChild: String?
     override func viewDidLoad() {
         //navigationController?.navigationBar.isHidden = true
         
@@ -45,6 +46,8 @@ class PerfilViewController: UIViewController {
         image.image = UIImage(named: "default-user")
         image.layer.masksToBounds = true
         image.layer.cornerRadius = image.frame.height/2
+        image.contentMode = .scaleAspectFill
+        
         if userProdutor!.image == nil{
             DispatchQueue.global(qos: .background).async {
                 
@@ -64,11 +67,11 @@ class PerfilViewController: UIViewController {
             }
         }
         
-//        let menuLabel = UILabel(frame: CGRect(x: 83, y: 56, width: 248, height: 62))
-//        menuLabel.textColor = .systemGray
-//        menuLabel.font = menuLabel.font.withSize(50)
-//        menuLabel.text = "Menu"
-//        menuLabel.textAlignment = .center
+        //        let menuLabel = UILabel(frame: CGRect(x: 83, y: 56, width: 248, height: 62))
+        //        menuLabel.textColor = .systemGray
+        //        menuLabel.font = menuLabel.font.withSize(50)
+        //        menuLabel.text = "Menu"
+        //        menuLabel.textAlignment = .center
         
         
         let greetingsLabel = UILabel(frame: CGRect(x: 20, y: 300, width: scrollView.frame.size.width - 40, height: 200))
@@ -127,39 +130,73 @@ class PerfilViewController: UIViewController {
         solicitationTableView.backgroundColor = .clear
         solicitationsControl.addSubview(solicitationTableView)
         
-        for uid in userProdutor!.solicitations{
-            let ref = Database.database().reference().child("users").child(uid)
+        let ref = Database.database().reference().child("users").child(userProdutor!.uid!).child("solicitations")
+        
+        ref.observe(.childAdded, with: { (snapshot) -> Void in
             
-            ref.observe(.value, with: { (snapshot) -> Void in
-                
-                let produtor = Produtor(snapshot: snapshot)
-                
-                self.solicitators.append(produtor)
-                self.solicitationTableView.reloadData()
-                DispatchQueue.global(qos: .background).async {
+            if let uid = snapshot.value as? String{
+                let ref = Database.database().reference().child("users").child(uid)
+                ref.observeSingleEvent(of: .value, with: { (snapshot) -> Void in
+                    let produtor = Produtor(snapshot: snapshot)
+                    self.solicitators.append(produtor)
+                    self.solicitationTableView.frame.size.height = CGFloat(self.solicitators.count*80)
+                    self.solicitatorsButton.setTitle("Ver solicitações pendentes (\(self.solicitators.count))", for: .normal)
+                    if self.solicitationsControl.frame.size.height > 50{
+                        self.solicitationsControl.frame.size.height += 80
+                    }
+                    self.solicitationTableView.reloadData()
                     
+                    let contentRect: CGRect = self.scrollView.subviews.reduce(into: .zero) { rect, view in
+                        rect = rect.union(view.frame)
+                    }
+                    self.scrollView.contentSize.height = contentRect.height + 10
                     
-                    if produtor.imageURL != nil{
+                    DispatchQueue.global(qos: .background).async {
                         
                         
-                        let url = NSURL(string: produtor.imageURL!)
-                        let data = NSData(contentsOf: url! as URL)
-                        if data != nil {
-                            produtor.image = UIImage(data: data! as Data)
+                        if produtor.imageURL != nil{
                             
-                            DispatchQueue.main.async {
-                                self.solicitationTableView.reloadData()
+                            
+                            let url = NSURL(string: produtor.imageURL!)
+                            let data = NSData(contentsOf: url! as URL)
+                            if data != nil {
+                                produtor.image = UIImage(data: data! as Data)
                                 
+                                DispatchQueue.main.async {
+                                    self.solicitationTableView.reloadData()
+                                    
+                                }
                             }
                         }
                     }
+                })
+            }
+            
+        })
+        
+        ref.observe(.childRemoved, with: { (snapshot) -> Void in
+            if let uid = self.removedChild{
+                if let index = self.solicitators.firstIndex(where: {$0.uid == uid}){
+                    
+                    self.solicitators.remove(at: index)
+                    self.solicitatorsButton.setTitle("Ver solicitações pendentes (\(self.solicitators.count))", for: .normal)
+                    self.solicitationTableView.reloadData()
+                    self.solicitationTableView.frame.size.height -= 80
+                    if(self.solicitationsControl.frame.size.height > 50){
+                        UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
+                            
+                            self.solicitationsControl.frame.size.height -= 80
+                            self.connectionsControl.frame.origin.y = self.solicitationsControl.frame.maxY + 30
+                            
+                        })
+                    }
                 }
-                
-                
-                
-                
-            })
-        }
+                if let index = userProdutor!.solicitations.firstIndex(where: {$0 == uid}){
+                    
+                    userProdutor!.solicitations.remove(at: index)
+                }
+            }
+        })
         
         
         
@@ -177,8 +214,8 @@ class PerfilViewController: UIViewController {
         connectionsButton.setTitleColor(.systemGray, for: .normal)
         connectionsButton.setTitle("Ver solicitações aprovadas por você (\(connections.count))", for: .normal)
         connectionsControl.addSubview(connectionsButton)
-
-
+        
+        
         
         connectionTableView.frame = CGRect(x: 0, y: 50, width: self.connectionsControl.frame.size.width, height: CGFloat(connections.count*80))
         connectionTableView.register(SolicitationTableViewCell.self, forCellReuseIdentifier: "solicitationCell")
@@ -186,12 +223,12 @@ class PerfilViewController: UIViewController {
         connectionTableView.delegate = self
         connectionTableView.dataSource = self
         connectionTableView.separatorStyle = .singleLine
-
+        
         connectionTableView.backgroundColor = .clear
         connectionsControl.addSubview(connectionTableView)
         
         let ref = Database.database().reference().child("users").child(userProdutor!.uid!).child("connections")
-            
+        
         ref.observe(.childAdded, with: { (snapshot) -> Void in
             
             if let uid = snapshot.value as? String {
@@ -303,23 +340,7 @@ class PerfilViewController: UIViewController {
 
 extension PerfilViewController: UITableViewDelegate, UITableViewDataSource, removeSolicitatorDelegate{
     func removeSolicitator(solicitator: String) {
-        if let index = solicitators.firstIndex(where: {$0.uid == solicitator}){
-            
-            self.solicitators.remove(at: index)
-            solicitatorsButton.setTitle("Ver solicitações pendentes (\(solicitators.count))", for: .normal)
-            self.solicitationTableView.reloadData()
-            self.solicitationTableView.frame.size.height -= 80
-            UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
-                self.solicitationsControl.frame.size.height -= 80
-                self.connectionsControl.frame.origin.y = self.solicitationsControl.frame.maxY + 30
-            })
-        }
-        if let index = userProdutor!.solicitations.firstIndex(where: {$0 == solicitator}){
-            
-            userProdutor!.solicitations.remove(at: index)
-        }
-        
-        
+        removedChild = solicitator
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -364,16 +385,16 @@ extension PerfilViewController: UITableViewDelegate, UITableViewDataSource, remo
         else{
             produtor = connections[indexPath.row]
         }
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "solicitationCell", for: indexPath) as? SolicitationTableViewCell else {fatalError("The dequeued cell is not an instance of SolicitationTableViewCell.")}
-            
-            
-            cell.name.text = produtor.name
-            cell.userImage.image = produtor.image
-            cell.backgroundColor = .clear
-            let selectedBackgroundView = UIView()
-            selectedBackgroundView.backgroundColor = .clear
-            cell.selectedBackgroundView = selectedBackgroundView
-            return cell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "solicitationCell", for: indexPath) as? SolicitationTableViewCell else {fatalError("The dequeued cell is not an instance of SolicitationTableViewCell.")}
+        
+        
+        cell.name.text = produtor.name
+        cell.userImage.image = produtor.image
+        cell.backgroundColor = .clear
+        let selectedBackgroundView = UIView()
+        selectedBackgroundView.backgroundColor = .clear
+        cell.selectedBackgroundView = selectedBackgroundView
+        return cell
         
     }
     
